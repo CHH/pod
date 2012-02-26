@@ -2,17 +2,19 @@ Pod, a simple Web Server Interface for PHP [WIP]
 ------------------------------------------------
 
 > Show me the source code!
-> -- You, just now.
+>
+> &mdash; You, just now.
 
 No. There is no source code yet. I'm practicing Readme Driven
 Development here. But don't turn away! I really appreciate your
-Feedback on this, so please stay, read it and tell me your feedback
-to [@yuri41](http://twitter.com/yuri41) or submitting
-an Issue in the [Issue Tracker](http://github.com/CHH/Pod/issues).
+Feedback on this, so please stay, read it and send your feedback
+to [@yuri41](http://twitter.com/yuri41) or submit
+an Issue to the [Issue Tracker](http://github.com/CHH/Pod/issues).
 
 ---
 
-> Pod &mdash; The socket for holding the bit in a boring tool.
+> Pod, the socket for holding the bit in a boring tool.
+>
 > &mdash; [Wordnik](http://www.wordnik.com/words/pod)
 
 Pod is a simple interface between the PHP Application and the Web
