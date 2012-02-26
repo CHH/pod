@@ -127,7 +127,6 @@ the format in a `format` parameter could look like this:
             if ($format = @$params['format'] and isset($this->formats[$format])) {
                 $env['HTTP_CONTENT_TYPE'] = $this->formats[$format];
             }
-            return true;
         }
     }
 
