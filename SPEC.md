@@ -15,12 +15,11 @@ and returns an Array of exactly three values:
 
 ## The Environment
 
-The environment must be an instance of Hash that includes
-CGI-like headers. The application is free to modify the
-environment.
+The environment must be an Array that includes CGI-like headers.
+The application is free to modify the environment.
 
 The environment is required to include these variables
-(adopted from PEP333), except when they'd be empty, but see
+(adopted from PEP333 and Rack), except when they'd be empty, but see
 below.
 
 <dl>
