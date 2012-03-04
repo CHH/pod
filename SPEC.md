@@ -93,12 +93,12 @@ Pod-specific variables:
 <dl>
     <dt>pod.version</dt>
     <dd>
-       The Array [1,0], representing this version of Pod. 
+       The Array <code>[1,0]</code>, representing this version of Pod. 
     </dd>
     
     <dt>pod.url_scheme</dt>
     <dd>
-        `http` or `https`, depending on the request URL.
+        <code>http</code> or <code>https</code>, depending on the request URL.
     </dd>
 
     <dt>pod.input</dt>
@@ -113,25 +113,22 @@ Pod-specific variables:
 
     <dt>pod.multithread</dt>
     <dd>
-        `true` if the application object may be simultaneously invoked 
-        by another thread in the same process, false otherwise.
+        <code>true</code> if the application object may be simultaneously invoked 
+        by another thread in the same process, <code>false</code> otherwise.
     </dd>
 
     <dt>pod.multiprocess</dt>
     <dd>
-        `true` if an equivalent application object may be 
-        simultaneously invoked by another process, `false` otherwise.
+        <code>true</code> if an equivalent application object may be 
+        simultaneously invoked by another process, <code>false</code> otherwise.
     </dd>
 
     <dt>pod.run_once</dt>
     <dd>
-        `true` if the server expects (but does not guarantee!) that the 
+        <code>true</code> if the server expects (but does not guarantee!) that the 
         application will only be invoked this one time during the life 
-        of its containing process. Normally, this will only be `true` 
+        of its containing process. Normally, this will only be <code>true</code>
         for a server based on CGI (or something similar).
-        Additional environment specifications have approved to
-        standardized middleware APIs. None of these are required to
-        be implemented by the server.
     </dd>
 </dl>
 
