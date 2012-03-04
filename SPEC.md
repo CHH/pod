@@ -1,12 +1,10 @@
-This specification aims to formalize the Rack protocol.  You
-can (and should) use Rack::Lint to enforce it.
-When you develop middleware, be sure to add a Lint before and
-after to catch all mistakes.
+This specification aims to formalize the Pod protocol.
 
-# Rack applications
+_This is a Draft._ Everything may change at any time.
 
-A Rack application is a Ruby object (not a class) that
-responds to `call`.
+# Pod applications
+
+A Pod application is any valid PHP callback.
 
 It takes exactly one argument, the *environment*
 and returns an Array of exactly three values:
@@ -90,58 +88,58 @@ below.
     </dd>
 </dl>
 
-In addition to this, the Rack environment must include these
-Rack-specific variables:
+In addition to this, the Pod environment must include these
+Pod-specific variables:
 
 <dl>
-    <dt>rack.version</dt>
+    <dt>pod.version</dt>
     <dd>
-       The Array [1,1], representing this version of Rack. 
+       The Array [1,0], representing this version of Pod. 
     </dd>
     
-    <dt>rack.url_scheme</dt>
+    <dt>pod.url_scheme</dt>
     <dd>
-        +http+ or +https+, depending on the request URL.
+        `http` or `https`, depending on the request URL.
     </dd>
 
-    <dt>rack.input</dt>
+    <dt>pod.input</dt>
     <dd>
         See below, the input stream.
     </dd>
 
-    <dt>rack.errors</dt>
+    <dt>pod.errors</dt>
     <dd>
         See below, the error stream.
     </dd>
 
-    <dt>rack.multithread</dt>
+    <dt>pod.multithread</dt>
     <dd>
-        true if the application object may be simultaneously invoked 
+        `true` if the application object may be simultaneously invoked 
         by another thread in the same process, false otherwise.
     </dd>
 
-    <dt>rack.multiprocess</dt>
+    <dt>pod.multiprocess</dt>
     <dd>
-        true if an equivalent application object may be 
-        simultaneously invoked by another process, false otherwise.
+        `true` if an equivalent application object may be 
+        simultaneously invoked by another process, `false` otherwise.
     </dd>
 
-    <dt>rack.run_once</dt>
+    <dt>pod.run_once</dt>
     <dd>
-        true if the server expects (but does not guarantee!) that the 
+        `true` if the server expects (but does not guarantee!) that the 
         application will only be invoked this one time during the life 
-        of its containing process. Normally, this will only be true 
+        of its containing process. Normally, this will only be `true` 
         for a server based on CGI (or something similar).
         Additional environment specifications have approved to
-        standardized middleware APIs.  None of these are required to
+        standardized middleware APIs. None of these are required to
         be implemented by the server.
     </dd>
 </dl>
 
 The server or the application can store their own data in the
 environment, too. The keys must contain at least one dot,
-and should be prefixed uniquely. The prefix `rack.`
-is reserved for use with the Rack core distribution and other
+and should be prefixed uniquely. The prefix `pod.`
+is reserved for use with the Pod core distribution and other
 accepted specifications and must not be used otherwise.
 The environment must not contain the keys
 `HTTP_CONTENT_TYPE` or `HTTP_CONTENT_LENGTH`
@@ -150,10 +148,10 @@ The environment must not contain the keys
 The CGI keys (named without a period) must have String values.
 There are the following restrictions:
 
- * `rack.version` must be an array of Integers.
- * `rack.url_scheme` must either be `http` or `https`.
- * There must be a valid input stream in `rack.input`.
- * There must be a valid error stream in `rack.errors`.
+ * `pod.version` must be an array of Integers.
+ * `pod.url_scheme` must either be `http` or `https`.
+ * There must be a valid input stream in `pod.input`.
+ * There must be a valid error stream in `pod.errors`.
  * The `REQUEST_METHOD` must be a valid token.
  * The `SCRIPT_NAME`, if non-empty, must start with `/`
  * The `PATH_INFO`, if non-empty, must start with `/`
@@ -165,51 +163,29 @@ There are the following restrictions:
 
 ### The Input Stream
 
-The input stream is an IO-like object which contains the raw HTTP
+The input stream is a PHP stream resource which contains the raw HTTP
 POST data.
-When applicable, its external encoding must be "ASCII-8BIT" and it
-must be opened in binary mode, for Ruby 1.9 compatibility.
-The input stream must respond to `gets`, `each`, `read` and `rewind`.
 
- * `gets` must be called without arguments and return a string,
-   or `nil` on EOF.
- * `read` behaves like `IO#read`. Its signature is `read([length, [buffer]])`.
-   If given, `length` must be a non-negative Integer (>= 0) or `nil`, and `buffer` must
-   be a String and may not be nil. If `length` is given and not nil, then this method
-   reads at most `length` bytes from the input stream. If `length` is not given or nil,
-   then this method reads all data until EOF.
-   When EOF is reached, this method returns nil if `length` is given and not `nil`, or `""`
-   if `length` is not given or is nil.
-   If `buffer` is given, then the read data will be placed into `buffer` instead of a
-   newly created String object.
- * `each` must be called without arguments and only yield Strings.
- * `rewind` must be called without arguments. It rewinds the input
-   stream back to the beginning. It must not raise Errno::ESPIPE:
-   that is, it may not be a pipe or a socket. Therefore, handler
-   developers must buffer the input data into some rewindable object
-   if the underlying input stream is not rewindable.
- * `close` must never be called on the input stream.
+`fclose` must _never_ be called on the input stream.
 
 ### The Error Stream
 
-The error stream must respond to `puts`, `write` and `flush`.
+The error stream is a PHP stream resource which is used to write errors
+to.
 
- * `puts` must be called with a single argument that responds to `to_s`.
- * `write` must be called with a single argument that is a String.
- * `flush` must be called without arguments and must be called
-   in order to make the error appear for sure.
- * `close` must never be called on the error stream.
+`fclose` must _never_ be called on the error stream.
 
 ## The Response
 
 ### The Status
 
-This is an HTTP status. When parsed as integer (`to_i`), it must be
+This is an HTTP status. When parsed as integer, it must be
 greater than or equal to 100.
 
 ### The Headers
 
- * The header must respond to `each`, and yield values of key and value.
+ * The header must be usable with `foreach` and yield the header name
+   as key and the header value as value.
  * The header keys must be Strings.
  * The header must not contain a `Status` key,
    contain keys with `:` or newlines in their name,
@@ -234,22 +210,18 @@ There must not be a `Content-Length` header when the
 
 ### The Body
 
- * The Body must respond to `each`
-   and must only yield String values.
- * The Body itself should not be an instance of String, as this will
-   break in Ruby 1.9.
- * If the Body responds to `close`, it will be called after iteration.
- * If the Body responds to `to_path`, it must return a String
-   identifying the location of a file whose contents are identical
-   to that produced by calling `each`; this may be used by the
-   server as an alternative, possibly more efficient way to
-   transport the response.
- * The Body commonly is an Array of Strings, the application
-   instance itself, or a File-like object.
+These are valid values for the body:
+
+ * Variables which are usable in `foreach`, each iteration must yield
+   a String.
+ * Variables of type `resource`, `fclose` will be called after the response was sent.
+ * Instances of `SplFileInfo`.
 
 ## Thanks
 
-Some parts of this specification are adopted from PEP333: Python
-Web Server Gateway Interface
-v1.0 (http://www.python.org/dev/peps/pep-0333/). I'd like to thank
-everyone involved in that effort.
+This is a port of the [Rack Specification][rack_spec].
+Many thanks to Christian Neukirchen for creating the Rack Spec.
+
+Please see the [Rack Specification][rack_spec] for additional thanks.
+
+[rack_spec]: http://rack.rubyforge.org/doc/SPEC.html
