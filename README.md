@@ -20,7 +20,7 @@ Everything is up for discussion (including the name)!
 > &mdash; [Wordnik](http://www.wordnik.com/words/pod)
 
 Pod is a simple interface between the PHP Application and the Web
-Server. Pod is a port of the [Rack Specification][rack_spec], with
+Server. Pod is a port of the [Rack Specification][rack], with
 some things done the "PHP way".
 
 * * *
