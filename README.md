@@ -45,7 +45,7 @@ of __very well written__ Specs and were a big help and inspiration.
  * A common library which handles web server inconsistencies via
    Handlers.
 
-### Why $\_SERVER is flawed
+### Aside: Why $\_SERVER is flawed
 
 The `$_SERVER` variable has one big flaw: it's entirely up to the server
 which keys exist and what the values contain.
